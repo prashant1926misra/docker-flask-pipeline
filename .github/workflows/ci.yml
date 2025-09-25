@@ -1,1 +1,16 @@
+name: Simple Push Trigger
 
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  hello-job:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Run hello command
+      run: echo "Hello from GitHub Actions"
