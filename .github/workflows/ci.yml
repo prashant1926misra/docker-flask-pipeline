@@ -25,5 +25,4 @@ jobs:
         pip install pytest  
         
     - name: Run tests with pytest
-      run: |
-        PYTHONPATH=. pytest -q
+      run: export PYTHONPATH=$(pwd) && pytest -v
