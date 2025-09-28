@@ -30,7 +30,7 @@ jobs:
         pip install pytest  
         
     - name: configure aws credentials
-      uses: aws-actions/configure-aws-credentials@4
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::703623468959:role/GitHubActionsECRPushRole
         role-session-name: sample-role
