@@ -1,7 +1,10 @@
 name: CI/CD Pipeline
 
 on:
-  workflow_dispatch:   # allow manual trigger
+ # workflow_dispatch:   # allow manual trigger
+  push:
+    branches:
+      - main
 
 env:
   AWS_REGION : "ap-south-1"
