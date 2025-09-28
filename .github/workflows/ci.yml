@@ -31,6 +31,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest  
+
+    - name: Run tests with pytest
+      run: export PYTHONPATH=$(pwd) && pytest -v
         
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -39,7 +42,19 @@ jobs:
         role-session-name: sample-role
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Run tests with pytest
-      run: export PYTHONPATH=$(pwd) && pytest -v
+    - name: Login to Amazon ECR                                   # https://github.com/aws-actions/amazon-ecr-login
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Build, tag, and push docker image to Amazon ECR
+      env:
+         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+         REPOSITORY: my-ecr-repo
+         IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+
       
 
