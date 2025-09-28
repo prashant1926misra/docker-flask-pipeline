@@ -3,6 +3,13 @@ name: CI/CD Pipeline
 on:
   workflow_dispatch:   # allow manual trigger
 
+env:
+  AWS_REGION : "ap-south-1"
+
+permissions:                                 # https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws
+  id-token: write 
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,5 +29,14 @@ jobs:
         pip install -r requirements.txt
         pip install pytest  
         
+    - name: configure aws credentials
+      uses: aws-actions/configure-aws-credentials@4
+      with:
+        role-to-assume: arn:aws:iam::703623468959:role/GitHubActionsECRPushRole
+        role-session-name: sample-role
+        aws-region: ${{ env.AWS_REGION }}
+
     - name: Run tests with pytest
       run: export PYTHONPATH=$(pwd) && pytest -v
+      
+
