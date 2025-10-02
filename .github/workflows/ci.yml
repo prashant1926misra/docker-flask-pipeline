@@ -83,6 +83,11 @@ jobs:
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
 
+    - name: Validate ECS Service Health
+      run: |
+        pip install requests
+        python validate.py 
+
 
       
 
