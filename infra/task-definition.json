@@ -1,6 +1,6 @@
 {
   "family": "myapp-task",
-  "networkMode": "awsvpc", 
+  "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "1024",
   "memory": "2048",
@@ -26,7 +26,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/myapp-task", 
+          "awslogs-group": "/ecs/myapp-task",
           "awslogs-create-group": "true",
           "awslogs-region": "ap-south-1",
           "awslogs-stream-prefix": "ecs"
@@ -38,6 +38,5 @@
   "runtimePlatform": {
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
-  },
-  "taskDefinitionArn": "arn:aws:ecs:ap-south-1:703623468959:task-definition/myapp-task:2"
+  }  
 }
