@@ -1,3 +1,9 @@
+# =======================================================================================================
+# https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws
+# https://github.com/aws-actions/amazon-ecr-login
+# https://docs.github.com/en/actions/how-tos/deploy/deploy-to-third-party-platforms/amazon-elastic-container-service
+# ========================================================================================================
+
 name: CI/CD Pipeline
 
 on:
@@ -8,8 +14,12 @@ on:
 
 env:
   AWS_REGION : "ap-south-1"
+  ECS_SERVICE: "myapp-task-service-o3ya8zhh_SERVICE"
+  ECS_CLUSTER: "myapp-cluster"
+  ECS_TASK_DEFINITION: "infra/task-definition.json"
+  CONTAINER_NAME: "myapp-container" 
 
-permissions:                                 # https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws
+permissions:                                 
   id-token: write 
   contents: read
 
@@ -42,7 +52,7 @@ jobs:
         role-session-name: sample-role
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Login to Amazon ECR                                   # https://github.com/aws-actions/amazon-ecr-login
+    - name: Login to Amazon ECR                                  
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
     
@@ -54,6 +64,22 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+    
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def 
+      uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+      with: 
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+      with:
+        task-defination: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
 
 
       
