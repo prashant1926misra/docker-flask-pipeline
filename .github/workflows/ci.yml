@@ -86,7 +86,7 @@ jobs:
     - name: Validate ECS Service Health
       run: |
         pip install requests
-        python validate.py 
+        python tests/validate.py
 
 
       
