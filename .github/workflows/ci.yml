@@ -14,7 +14,7 @@ on:
 
 env:
   AWS_REGION : "ap-south-1"
-  ECS_SERVICE: "myapp-task-service-o3ya8zhh_SERVICE"
+  ECS_SERVICE: "myapp-task-service-o3ya8zhh"
   ECS_CLUSTER: "myapp-cluster"
   ECS_TASK_DEFINITION: "infra/task-definition.json"
   CONTAINER_NAME: "myapp-container" 
