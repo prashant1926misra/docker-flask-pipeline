@@ -5,7 +5,7 @@
 This project demonstrates an end-to-end CI/CD pipeline for a containerized Python application. The pipeline automatically builds, tests, and deploys a Dockerized Python app to AWS ECS (Fargate) using GitHub Actions. Python is used both for the application itself and for automation scripts.
 
 
-## Architecture
+## Workflow Diagram
 
 ```text
 GitHub Repository (Python App + Workflow)
